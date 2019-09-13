@@ -1,14 +1,124 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Micro-note</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='https://unpkg.com/papercss@1.6.1/dist/paper.css'>
+    <link href="https://fonts.googleapis.com/css?family=Gayathri|Source+Sans+Pro&display=swap" rel="stylesheet">
     <script src='main.js'></script>
+    <style>
+        #info {
+            font-family: 'Gayathri', sans-serif;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 20px;
+        }
+
+        h1 {
+            text-shadow: 4px 4px 4px #aaa;
+        }
+
+        #noteDisplay {
+            background: #eee;
+            border-radius: 5px;
+            margin: 16px 0;
+        }
+    </style>
 </head>
+
 <body>
-    Testing .....
+    <h1> Lab 2</h1>
+    <div id="info">
+        <h2>Requirement:</h2>
+        <p>
+            This lab will get you started using git, GitHub, and also introduce you to an open source project called
+            Filer,
+            which we'll be working with in Release 0.1.<br>
+            <br>
+            Our goal is to create a single-page, serverless web app for note taking, and host it on GitHub.<br>
+            <br>
+            NOTE: You are free to collaborate with others in the class, share ideas, code, and help one another debug.
+            <br>
+            <br>
+            However, every student must follow the steps to completion so as to create the necessary work products. <br>
+        </p>
+    </div>
+
+    <div id="notePadContain"></div>
+    <button onclick="saveFile()">saveFile</button>
+    <button onclick="removeText()">Remove text</button>
+
 </body>
+<script src="https://unpkg.com/filer/dist/filer.min.js"></script>
+<script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+
+
+<script>
+    const fs = new Filer.FileSystem();
+    var staitcString = "Welcome to my notepad!";
+
+    //Dom manipulations 
+    var divContent = document.getElementById("notePadContain");
+    var containDiv = document.createElement("div");
+    containDiv.setAttribute("contenteditable", true);
+    divContent.appendChild(containDiv);
+    containDiv.id = "noteDisplay";
+    hotkeys.filter = function (event) {
+        var tagName = (event.target || event.srcElement).tagName;
+        return !(tagName.isContentEditable || tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA');
+    }
+
+
+    window.addEventListener("DOMContentLoaded", (event) => {
+
+
+        fs.readFile('/noteFile', 'utf8', function (err, data) {
+            if (err) {
+                console.log(err);
+                if (err) console.log(err); throw err;
+                containDiv.textContent = err;
+            }
+            else {
+                containDiv.textContent = staitcString;
+            }
+
+            if (data) {
+                containDiv.textContent = data;
+                console.log("File loaded.");
+                alert(" File loaded!");
+            }
+        });
+    });
+
+
+
+    // Key Combenation
+    hotkeys('ctrl+a,cmd+a', function (event, handler) {
+        switch (handler.key) {
+            case 'ctrl+a':
+                saveFile();
+                alert(" Note File saved!");
+                break;
+            case 'cmd+a':
+                saveFile();
+                alert(" Note File saved!");
+                break;
+        }
+    });
+
+
+    function saveFile() {
+        fs.writeFile('/noteFile', document.querySelector('#noteDisplay').innerHTML);
+
+    }
+
+    function removeText() {
+        document.querySelector('#noteDisplay').innerHTML = ""
+    }
+
+</script>
+
+
 </html>
