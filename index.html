@@ -60,10 +60,12 @@
     <div id="notePadContain"></div>
     <button onclick="saveFile()">saveFile</button>
     <button onclick="removeText()">Remove text</button>
+    <button onclick="downloadFile()">Download Note</button>
 
 </body>
 <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
 <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+<script src="https://cdn.jsdelivr.net/g/filesaver.js"></script>
 
 
 <script>
@@ -127,6 +129,12 @@
 
     function removeText() {
         document.querySelector('#noteDisplay').innerHTML = " "
+    }
+
+    function downloadFile() {
+        var file = new Blob([document.querySelector('#noteDisplay').innerHTML], {type: "text/plain;charset=utf-8"});
+        saveAs(file, "note.txt");
+
     }
 
 </script>
